@@ -1,0 +1,5 @@
+db.name=kinoyalta
+db.user=root
+db.password=root
+log.path=kinoyalta.log
+env=production
