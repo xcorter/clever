@@ -1,5 +1,5 @@
-db.name=kinoyalta
+db.name=clever
 db.user=root
 db.password=root
-log.path=kinoyalta.log
+log.path=clever.log
 env=production

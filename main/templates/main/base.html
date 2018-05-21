@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}Ответы на вопросы игры "Клевер"{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'main/iconic/css/open-iconic-bootstrap.css' %}" />
+  </head>
+  <body id="page-top">
+    <header>
+      <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+          <a href="/" class="navbar-brand d-flex align-items-center">Ответы на клевер!</a>
+        </div>
+      </div>
+    </header>
+    {% block content %}{% endblock %}
+  </body>
+
+</html>

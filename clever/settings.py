@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'main',
+    'nested_admin'
 ]
 
 MIDDLEWARE = [
@@ -72,13 +74,34 @@ WSGI_APPLICATION = 'clever.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
+configPath = os.path.join(os.path.dirname(__file__), ".config")
+config = {}
+if os.path.exists(configPath):
+    with open(configPath, "r") as fileContent:
+        configStrings = fileContent.read().split('\n')
+        for configString in configStrings:
+            if configString == "":
+                continue
+            keyValue = configString.split('=')
+            config[keyValue[0]] = keyValue[1]
+else:
+    raise Exception('Config not found')
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config['db.name'],
+        'USER': config['db.user'],
+        'PASSWORD': config['db.password'],
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
 }
+
+if config["env"] == "production":
+    DEBUG = False
+    ALLOWED_HOSTS = ["194.58.123.229", "clever-answers.ru"]
+else:
+    DEBUG = True
 
 
 # Password validation
@@ -118,3 +141,42 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+_PATH = os.path.abspath(os.path.dirname(__file__))
+
+STATIC_ROOT = os.path.join(_PATH, 'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': config['log.path'],
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['file'],
+            'propagate': True,
+            'level':'ERROR',
+        },
+        'main': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+        },
+    }
+}

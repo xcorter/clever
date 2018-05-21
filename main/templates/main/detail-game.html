@@ -1,0 +1,28 @@
+{% extends "main/base.html" %}
+{% block title %}
+Игра от {{ object.date_time|date:"Y-m-d H:i" }}, разыгрывается {{ object.money }} рублей. Ведущий {{ object.leading }}
+{% endblock %}
+{% block content %}
+  <div class="container py-md-3">
+    <h1 class="bd-title ">Вопросы и ответы</h1>
+
+    <div class="list-group">
+      {% for question in questions %}
+        <div class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex justify-content-between">
+            <h5 class="mb-1">{{ question.question}}</h5>
+            <!-- <small>3 days ago</small> -->
+          </div>
+          <div class="row">
+            {% for choice in question.choice_set.all %}
+              <div class="col">
+                {% if choice.is_correct %} <span class="oi oi-check text-success"></span> {% endif %}
+                {{ choice.text }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
